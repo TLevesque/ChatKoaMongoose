@@ -1,0 +1,9 @@
+const any = yield new Promise((resolve, reject) => {
+  sql.execute('blabla', function (result, err) {
+    if(err) {
+      reject(err)
+    }
+
+    resolve(result)
+  })
+})

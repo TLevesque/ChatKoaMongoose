@@ -8,6 +8,7 @@ const http = require('http');
 const path = require('path');
 const serve = require('koa-static');
 const bodyParser = require('koa-bodyparser');
+const handlebars = require('handlebars');
 
 const router = require('./router.js');
 
