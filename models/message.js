@@ -14,7 +14,7 @@ mongoose.connect('mongodb://localhost/newdb');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
-  console.log('Connected!');
+  console.log('Moogose connected!');
 });
 
 const msgSchema = mongoose.Schema({
@@ -30,11 +30,9 @@ exports.getAll = function () {
 };
 
 exports.save = function (msg) {
-  console.log(msg);
-  let newMsg = new Message(msg);
-  console.log(newMsg);
-  newMsg.save(function (err) {
+    let newMsg = new Message(msg);
+    newMsg.save(function (err) {
     if (err) return handleError(err);
-    console.log('new messsage saved!');
+    console.log('New messsage saved!');
   });
 };

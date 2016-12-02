@@ -1,5 +1,14 @@
 'use strict';
 
+var socket = io();
+
+socket.on('chat message', function (msg) {
+  console.log('message: ' + msg);
+  renderMsg(msg);
+});
+// io.on('connection', function(socket){
+// });
+
 //Button send message:
 $(document).ready(function () {
   $('#send').click(function () {
@@ -11,6 +20,7 @@ $(document).ready(function () {
     $('#inputText').val('');
     renderMsg(msg);
     postMsg(msg);
+    socket.emit('new message', msg);
   });
 
   $.ajax({
@@ -34,7 +44,7 @@ function postMsg(msg) {
     url: '/messages',
     data: JSON.stringify(msg),
     success: function (msgsArr) {
-      console.log('saved');
+      console.log('Message saved');
     },
     contentType: 'application/json',
     error: function (err) {
@@ -42,6 +52,8 @@ function postMsg(msg) {
     },
   });
 }
+
+
 
 function renderMsg (msg) {
   const $msgHtml = $('<h3 class="msg">').append(msg.content);

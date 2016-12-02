@@ -12,12 +12,11 @@ const handlebars = require('handlebars');
 
 const router = require('./router.js');
 
-//Define access to 404 page
-const notFound = fs.readFileSync('./static/404.html', 'utf8');
-
-
 //Serve files from static repo
 app.use(bodyParser());
+
+//Define access to 404 page
+const notFound = fs.readFileSync('./static/404.html', 'utf8');
 
 //Access router
 app.use(router.routes());
@@ -31,10 +30,38 @@ app.use(function* (next) {
 });
 
 //Error handling:
-app.on('error', function(err, ctx) {
+app.on('error', function (err, ctx) {
   console.error('server error', err, ctx);
 });
 
 app.use(router.allowedMethods());
 
-app.listen(3000);
+// Socket.io
+var server = http.Server(app.callback());
+var io = require('socket.io')(server);
+
+// io.on('connection', function (socket) {
+//   socket.on('click', function (data) {
+//     //process the data here
+//     console.log('client clicked SEND!:');
+//     console.log(data);
+//
+//     // emit an event
+//     console.log('responding with news');
+//     socket.emit('news', { hello: 'world' });
+//   });
+// });
+
+io.on('connection', function (socket) {
+  console.log('Client connected');
+  socket.on('new message', function (data) {
+      //process the data here
+      console.log('client clicked SEND!');
+      // io.emit('chat message', data);
+      socket.broadcast.emit('chat message', data);
+  });
+});
+
+server.listen(3000, function () {
+  console.log('Socket server listening...');
+});
